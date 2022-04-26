@@ -15,20 +15,20 @@
 
 /* globals $ */
 
-var sortButton = $('<a href="#" class="sort" id="startSort">sort items</a>')
-sortButton.insertAfter($('p.subtitle'))
-$('#startSort').css({'margin-left':'10px'})
+var sortButton = $('<a href="#" class="sort" id="startSort">sort items</a>');
+sortButton.insertAfter($('p.subtitle'));
+$('#startSort').css({'margin-left':'10px'});
 
 $('#startSort').click(function(){
-    var items = []
+    var items = [];
     $('div.image-container.column').each(function(e){
         let item = []
         let size, sizeMultiplier;
-        item.push($(this))
+        item.push($(this));
 
         let sizeInfo = $(this).find('p.file-size').text();
         let sizeSplit = sizeInfo.split(" ");
-        size = parseFloat(sizeSplit[0])
+        size = parseFloat(sizeSplit[0]);
         let sizeMultiplierDeterminer = sizeSplit[1]
         if (sizeMultiplierDeterminer == "kB"){
             sizeMultiplier = 1;
@@ -39,8 +39,8 @@ $('#startSort').click(function(){
         }
 
         item.push(size * sizeMultiplier);
-        items.push(item)
-        $(this).remove()
+        items.push(item);
+        $(this).remove();
     });
 
     var sortedItems = items.sort(function(a, b) {
@@ -48,6 +48,6 @@ $('#startSort').click(function(){
     });
 
     for (let i=0; i < sortedItems.length; i++){
-        $('div#table').append(sortedItems[i][0])
+        $('div#table').append(sortedItems[i][0]);
     }
-})
+});
