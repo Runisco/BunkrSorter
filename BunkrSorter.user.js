@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         BunkrSorter
 // @namespace    https://github.com/runisco
-// @version      1.0
+// @version      1.1
 // @updateURL    https://github.com/Runisco/BunkrSorter/raw/main/BunkrSorter.user.js
 // @downloadURL  https://github.com/Runisco/BunkrSorter/raw/main/BunkrSorter.user.js
 // @supportURL   https://github.com/Runisco/BunkrSorter/issues
@@ -33,9 +33,10 @@ $('#startSort').click(function(){
         if (sizeMultiplierDeterminer == "kB"){
             sizeMultiplier = 1;
         } else if (sizeMultiplierDeterminer == "MB"){
-            sizeMultiplier = 512;
+            sizeMultiplier = 200;
         } else if (sizeMultiplierDeterminer == "GB"){
-            sizeMultiplier = 1024;
+            size = size * 100
+            sizeMultiplier = 10240;
         }
 
         item.push(size * sizeMultiplier);
