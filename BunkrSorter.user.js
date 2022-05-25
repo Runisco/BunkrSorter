@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         BunkrSorter
 // @namespace    https://github.com/runisco
-// @version      1.1
+// @version      1.2
 // @updateURL    https://github.com/Runisco/BunkrSorter/raw/main/BunkrSorter.user.js
 // @downloadURL  https://github.com/Runisco/BunkrSorter/raw/main/BunkrSorter.user.js
 // @supportURL   https://github.com/Runisco/BunkrSorter/issues
@@ -19,6 +19,9 @@ var sortButton = $('<a href="#" class="sort" id="startSort">sort items</a>');
 sortButton.insertAfter($('p.subtitle'));
 $('#startSort').css({'margin-left':'10px'});
 
+var debug = false
+var debugOnlyOne = false
+
 $('#startSort').click(function(){
     var items = [];
     $('div.image-container.column').each(function(e){
@@ -26,22 +29,29 @@ $('#startSort').click(function(){
         let size, sizeMultiplier;
         item.push($(this));
 
+        if (debug || debugOnlyOne){console.log($(this))}
+        $(this).remove();
+
         let sizeInfo = $(this).find('p.file-size').text();
         let sizeSplit = sizeInfo.split(" ");
         size = parseFloat(sizeSplit[0]);
+        if (debug || debugOnlyOne) {console.log(sizeInfo + " " + size)}
+
         let sizeMultiplierDeterminer = sizeSplit[1]
-        if (sizeMultiplierDeterminer == "kB"){
+        if (sizeMultiplierDeterminer == "KiB"){
             sizeMultiplier = 1;
-        } else if (sizeMultiplierDeterminer == "MB"){
+        } else if (sizeMultiplierDeterminer == "MiB"){
             sizeMultiplier = 200;
-        } else if (sizeMultiplierDeterminer == "GB"){
+        } else if (sizeMultiplierDeterminer == "GiB"){
             size = size * 100
             sizeMultiplier = 10240;
         }
-
         item.push(size * sizeMultiplier);
+        if (debug || debugOnlyOne) {console.log(size + " = " + size * sizeMultiplier)}
+
         items.push(item);
         $(this).remove();
+        debugOnlyOne = false;
     });
 
     var sortedItems = items.sort(function(a, b) {
@@ -51,4 +61,4 @@ $('#startSort').click(function(){
     for (let i=0; i < sortedItems.length; i++){
         $('div#table').append(sortedItems[i][0]);
     }
-});
+})
