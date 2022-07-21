@@ -39,19 +39,19 @@ $('#startSort').click(function(){
 
         let sizeMultiplierDeterminer = sizeSplit[1]
         if (sizeMultiplierDeterminer == "KiB"){
-            sizeMultiplier = 1;
+            sizeMultiplier = (1/1024);
         } else if (sizeMultiplierDeterminer == "KB"){
+            sizeMultiplier = (1/1024);
+        } else if (sizeMultiplierDeterminer == "kB"){
+            sizeMultiplier = (1/1024);
+        }else if (sizeMultiplierDeterminer == "MiB"){
             sizeMultiplier = 1;
-        } else if (sizeMultiplierDeterminer == "MiB"){
-            sizeMultiplier = 200;
         } else if (sizeMultiplierDeterminer == "MB"){
-            sizeMultiplier = 200;
+            sizeMultiplier = 1;
         } else if (sizeMultiplierDeterminer == "GiB"){
-            size = size * 100
-            sizeMultiplier = 10240;
+            sizeMultiplier = 1024;
         } else if (sizeMultiplierDeterminer == "GB"){
-            size = size * 100
-            sizeMultiplier = 10240;
+            sizeMultiplier = 1024;
         }
         item.push(size * sizeMultiplier);
         if (debug || debugOnlyOne) {console.log(size + " = " + size * sizeMultiplier)}
