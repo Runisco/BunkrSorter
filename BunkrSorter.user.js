@@ -1,13 +1,14 @@
 // ==UserScript==
 // @name         BunkrSorter
 // @namespace    https://github.com/runisco
-// @version      1.3
+// @version      1.3a
 // @updateURL    https://github.com/Runisco/BunkrSorter/raw/main/BunkrSorter.user.js
 // @downloadURL  https://github.com/Runisco/BunkrSorter/raw/main/BunkrSorter.user.js
 // @supportURL   https://github.com/Runisco/BunkrSorter/issues
 // @description  Sorts bunkr items by size. Biggest first
 // @author       Runisco
 // @match        https://bunkr.is/a/*
+// @match        https://bunkr.ru/a/*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=bunkr.is
 // @require      https://code.jquery.com/jquery-3.3.1.min.js
 // @grant        none
