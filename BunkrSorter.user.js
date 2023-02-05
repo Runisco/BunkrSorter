@@ -1,123 +1,118 @@
 // ==UserScript==
 // @name         BunkrSorter
 // @namespace    https://github.com/runisco
-// @version      2.0
+// @version      2.1
 // @updateURL    https://github.com/Runisco/BunkrSorter/raw/main/BunkrSorter.user.js
 // @downloadURL  https://github.com/Runisco/BunkrSorter/raw/main/BunkrSorter.user.js
 // @supportURL   https://github.com/Runisco/BunkrSorter/issues
-// @description  Sorts bunkr items by size. Biggest first
+// @description  Toggle bunkr items by size.
 // @author       Runisco
 // @match        https://bunkr.is/a/*
 // @match        https://bunkr.ru/a/*
 // @match        https://bunkr.su/a/*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=bunkr.is
-// @require      https://code.jquery.com/jquery-3.3.1.min.js
 // @grant        none
 // ==/UserScript==
 
 /* globals $ */
 
-var sortButton = $('<a href="#" class="sort" id="startSort">sort items</a>');
-sortButton.insertAfter($('p.subtitle'));
-$('#startSort').css({'margin-left':'10px'});
-var sortButtonFriends = $('<li><a href="#" class="sort" id="startSortFriends">sort items</a></li>');
-sortButtonFriends.insertAfter($('div.friends'))
+const ascendingLabel = 'Sort (Smallest First)';
+const descendingLabel = 'Sort (Largest First)';
 
-var debug = true
-var debugOnlyOne = false
+let debug = true
+let debugOnlyOne = false
 
-$('#startSort').click(function(){
-    var items = [];
-    $('div.image-container.column').each(function(e){
-        let item = []
-        let size, sizeMultiplier;
-        item.push($(this));
+let direction = 'asc';
 
-        if (debug || debugOnlyOne){console.log($(this))}
-        $(this).remove();
+const styles = document.createElement('style');
+styles.innerHTML = `
+#btn-sort:hover {
+  text-decoration: underline;
+}
+`;
+document.head.prepend(styles);
 
-        let sizeInfo = $(this).find('p.file-size').text();
-        let sizeSplit = sizeInfo.split(" ");
-        size = parseFloat(sizeSplit[0]);
-        if (debug || debugOnlyOne) {console.log(sizeInfo + " " + size)}
+const sortButton = document.createElement('a');
+sortButton.id = 'btn-sort';
+sortButton.href = '#';
+sortButton.style.color = 'dodgerblue';
+sortButton.style.fontSize = '18px';
+sortButton.textContent = direction === 'desc' ? ascendingLabel : descendingLabel;
 
-        let sizeMultiplierDeterminer = sizeSplit[1]
-        if (sizeMultiplierDeterminer == "KiB"){
-            sizeMultiplier = (1/1024);
-        } else if (sizeMultiplierDeterminer == "KB"){
-            sizeMultiplier = (1/1024);
-        } else if (sizeMultiplierDeterminer == "kB"){
-            sizeMultiplier = (1/1024);
-        }else if (sizeMultiplierDeterminer == "MiB"){
-            sizeMultiplier = 1;
-        } else if (sizeMultiplierDeterminer == "MB"){
-            sizeMultiplier = 1;
-        } else if (sizeMultiplierDeterminer == "GiB"){
-            sizeMultiplier = 1024;
-        } else if (sizeMultiplierDeterminer == "GB"){
-            sizeMultiplier = 1024;
-        }
-        item.push(size * sizeMultiplier);
-        if (debug || debugOnlyOne) {console.log(size + " = " + size * sizeMultiplier)}
+const row = document.createElement('div');
+row.className = 'w-full px-2 lg:w-2/4';
+row.innerHTML = `
+<div class="mb-12-xxx">
+  <h1 class="text-[24px] font-bold text-dark dark:text-white">
+    <span id="btn-sort-container" class="text-primary text-[20px] break-normal"></span>
+  </h1>
+</div>
+`;
 
-        items.push(item);
-        $(this).remove();
-        debugOnlyOne = false;
-    });
+const header = document.querySelector('.-mx-4');
+header.append(row);
 
-    var sortedItems = items.sort(function(a, b) {
-        return b[1] - a[1];
-    });
+document.querySelector('#btn-sort-container').append(sortButton);
 
-    for (let i=0; i < sortedItems.length; i++){
-        $('div#table').append(sortedItems[i][0]);
+sortButton.addEventListener('click', (e) => {
+    e.preventDefault();
+
+    direction = direction === 'asc' ? 'desc' : 'asc';
+
+    const getSize = (container) => {
+        const parts = container.innerText.split(' ');
+        return Number.parseFloat(parts[0]).toFixed(2);
     }
-})
 
-$('#startSortFriends').click(function(){
-    var items = [];
-    $('div.overflow-hidden').each(function(e){
-        let item = []
-        let size, sizeMultiplier;
-        item.push($(this));
+    const getSizeMultiplier = (container) => {
+        const parts = container.innerText.split(' ');
+        let multiplier = parts[1].trim().toLowerCase();
 
-        if (debug || debugOnlyOne){console.log($(this))}
-        $(this).remove();
-
-        let sizeInfo = $(this).find('p:eq(1)').text();
-        let sizeSplit = sizeInfo.split(" ");
-        size = parseFloat(sizeSplit[0]);
-        if (debug || debugOnlyOne) {console.log(sizeInfo + " " + size)}
-
-        let sizeMultiplierDeterminer = sizeSplit[1]
-        if (sizeMultiplierDeterminer == "KiB"){
-            sizeMultiplier = (1/1024);
-        } else if (sizeMultiplierDeterminer == "KB"){
-            sizeMultiplier = (1/1024);
-        } else if (sizeMultiplierDeterminer == "kB"){
-            sizeMultiplier = (1/1024);
-        }else if (sizeMultiplierDeterminer == "MiB"){
-            sizeMultiplier = 1;
-        } else if (sizeMultiplierDeterminer == "MB"){
-            sizeMultiplier = 1;
-        } else if (sizeMultiplierDeterminer == "GiB"){
-            sizeMultiplier = 1024;
-        } else if (sizeMultiplierDeterminer == "GB"){
-            sizeMultiplier = 1024;
+        if (multiplier.indexOf('k') > -1) {
+            multiplier = (1/1024);
+        } else if (multiplier.indexOf('m') > -1) {
+            multiplier = 1;
+        } else if (multiplier.indexOf('g') > -1) {
+            multiplier = 1024;
         }
-        item.push(size * sizeMultiplier);
-        if (debug || debugOnlyOne) {console.log(size + " = " + size * sizeMultiplier)}
 
-        items.push(item);
-        $(this).remove();
-        debugOnlyOne = false;
-    });
-
-    var sortedItems = items.sort(function(a, b) {
-        return b[1] - a[1];
-    });
-
-    for (let i=0; i < sortedItems.length; i++){
-        $('div.grid').append(sortedItems[i][0]);
+        return multiplier;
     }
-})
+
+    const items = document.querySelectorAll('div.overflow-hidden');
+
+    if (debug || debugOnlyOne) {
+        [...items].forEach((i) => {
+            const container = i.querySelector('figcaption > p:nth-child(2)');
+            const size = getSize(container);
+            const sizeMultiplier = getSizeMultiplier(container);
+            console.log(i);
+            console.log(`${container.innerText} ${size}`)
+            console.log(`${size} = ${size * sizeMultiplier}`);
+        });
+    }
+
+    const sortedItems = [...items].sort((a, b) => {
+        const sizeContainerA = a.querySelector('figcaption > p:nth-child(2)');
+        const sizeContainerB = b.querySelector('figcaption > p:nth-child(2)');
+
+        let sizeA = getSize(sizeContainerA);
+        let sizeB = getSize(sizeContainerB);
+
+        let sizeMultiplierA = getSizeMultiplier(sizeContainerA);
+        let sizeMultiplierB = getSizeMultiplier(sizeContainerB);
+
+        sizeA = sizeA * sizeMultiplierA;
+        sizeB = sizeB * sizeMultiplierB;
+
+        return direction === 'asc' ? sizeA - sizeB : sizeB - sizeA;
+    });
+
+    const grid = document.querySelector('.grid');
+
+    [...grid.children].forEach((c) => c.remove());
+
+    sortedItems.forEach((i) => grid.append(i));
+
+    sortButton.textContent = direction === 'desc' ? ascendingLabel : descendingLabel;
+});
