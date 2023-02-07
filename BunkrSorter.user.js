@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         BunkrSorter
 // @namespace    https://github.com/runisco
-// @version      2.0
+// @version      2.1
 // @updateURL    https://github.com/Runisco/BunkrSorter/raw/main/BunkrSorter.user.js
 // @downloadURL  https://github.com/Runisco/BunkrSorter/raw/main/BunkrSorter.user.js
 // @supportURL   https://github.com/Runisco/BunkrSorter/issues
@@ -23,10 +23,13 @@ $('#startSort').css({'margin-left':'10px'});
 var sortButtonFriends = $('<li><a href="#" class="sort" id="startSortFriends">sort items</a></li>');
 sortButtonFriends.insertAfter($('div.friends'))
 
-var debug = true
+var debug = false
 var debugOnlyOne = false
+var identifiedClass = '';
+var identifiedContainer = '';
 
 $('#startSort').click(function(){
+    if (debug || debugOnlyOne){console.log("old startSort clicked")}
     var items = [];
     $('div.image-container.column').each(function(e){
         let item = []
@@ -75,8 +78,24 @@ $('#startSort').click(function(){
 })
 
 $('#startSortFriends').click(function(){
+    if (debug || debugOnlyOne){console.log("New startSortFriends clicked")}
+
     var items = [];
-    $('div.overflow-hidden').each(function(e){
+
+    if ($('div.overflow-hidden').length != 0){
+        identifiedClass = 'div.overflow-hidden'
+    } else if ($('div.grid-images_box').length != 0) {
+        identifiedClass = 'div.grid-images_box'
+    }
+
+    if ($('div.grid').length != 0){
+        identifiedContainer = 'div.overflow-hidden'
+    } else if ($('div.grid-images_box').length != 0) {
+        identifiedContainer = 'div.grid-images'
+    }
+
+
+    $(identifiedClass).each(function(e){
         let item = []
         let size, sizeMultiplier;
         item.push($(this));
@@ -118,6 +137,6 @@ $('#startSortFriends').click(function(){
     });
 
     for (let i=0; i < sortedItems.length; i++){
-        $('div.grid').append(sortedItems[i][0]);
+        $(identifiedContainer).append(sortedItems[i][0]);
     }
 })
