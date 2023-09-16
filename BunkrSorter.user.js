@@ -1,7 +1,7 @@
 // ==UserScript==
-// @name         BunkrSortertest
+// @name         BunkrSorter
 // @namespace    https://github.com/runisco
-// @version      3.0
+// @version      3.0a
 // @updateURL    https://github.com/Runisco/BunkrSorter/raw/main/BunkrSorter.user.js
 // @downloadURL  https://github.com/Runisco/BunkrSorter/raw/main/BunkrSorter.user.js
 // @supportURL   https://github.com/Runisco/BunkrSorter/issues
@@ -25,7 +25,10 @@ $('#startSort').css({'margin-left':'10px'});
 // $('#startlistSort').css({'margin-left':'10px'});
 var sortButtonFriends = $('<a id="startSortFriends" class="py-2 px-4 rounded inline-flex items-center justify-center" href="#" style="background: #5253F6;color: #F6F652;font-weight: bold;">Sort Items</a>');
 // var listButtonFriends = $('<li><a href="#" class="listSort" id="startlistSort">sort & list items</a></li>');
-sortButtonFriends.insertBefore($('a#statsLink'))
+// console.log($('a#statsLink').length)
+// sortButtonFriends.insertBefore($('a#statsLink'))
+// sortButtonFriends.insertBefore($('div.flex-row-reverse'))
+$('div.flex-row-reverse').prepend(sortButtonFriends)
 // listButtonFriends.insertAfter(sortButtonFriends)
 
 var debug = true
