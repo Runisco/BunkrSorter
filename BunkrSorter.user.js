@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         BunkrSorter
 // @namespace    https://github.com/runisco
-// @version      3.1.1
+// @version      3.2
 // @updateURL    https://github.com/Runisco/BunkrSorter/raw/main/BunkrSorter.user.js
 // @downloadURL  https://github.com/Runisco/BunkrSorter/raw/main/BunkrSorter.user.js
 // @supportURL   https://github.com/Runisco/BunkrSorter/issues
@@ -14,6 +14,7 @@
 // @match        https://bunkr.la/a/*
 // @match        https://bunkrr.su/a/*
 // @match        https://bunkr.sk/a/*
+// @match        https://bunkr.si/a/*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=bunkr.is
 // @require      https://code.jquery.com/jquery-3.3.1.min.js
 // @grant        none
