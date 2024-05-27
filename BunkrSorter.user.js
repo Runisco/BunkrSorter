@@ -16,6 +16,7 @@
 // @match        https://bunkr.sk/a/*
 // @match        https://bunkr.si/a/*
 // @match        https://bunkr.ws/a/*
+// @match        https://bunkr.se/a/*
 // @match        https://bunkr.black/a/*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=bunkr.is
 // @require      https://code.jquery.com/jquery-3.3.1.min.js
