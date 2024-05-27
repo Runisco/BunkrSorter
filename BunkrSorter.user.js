@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         BunkrSorter
 // @namespace    https://github.com/runisco
-// @version      3.4.1
+// @version      3.5
 // @updateURL    https://github.com/Runisco/BunkrSorter/raw/main/BunkrSorter.user.js
 // @downloadURL  https://github.com/Runisco/BunkrSorter/raw/main/BunkrSorter.user.js
 // @supportURL   https://github.com/Runisco/BunkrSorter/issues
